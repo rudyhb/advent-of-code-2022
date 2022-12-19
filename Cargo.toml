@@ -1,0 +1,20 @@
+[package]
+name = "advent-of-code-2022"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+log = "0.4.16"
+env_logger = "0.9.0"
+utils = { git = "https://github.com/rudyhb/utils.git" }
+serde = "1.0.136"
+anyhow = "1.0.57"
+thiserror = "1.0.30"
+enum_dispatch = "0.3.8"
+lazy_static = "1.4.0"
+rayon = "1.5.1"
+regex = "1.5.4"
+md5 = "0.7.0"
+permutator = "0.4.3"
