@@ -137,6 +137,7 @@ impl FromStr for Stacks {
     }
 }
 
+#[cfg(test)]
 mod tests {
     use super::*;
 
