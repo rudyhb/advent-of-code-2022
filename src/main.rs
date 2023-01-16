@@ -7,6 +7,7 @@ mod day04_camp_cleanup;
 mod day05_supply_stacks;
 mod day06_tuning_trouble;
 mod day07_no_space_left_on_device;
+mod day08_treetop_tree_house;
 
 fn main() {
     env_logger::init();
@@ -14,7 +15,7 @@ fn main() {
     let day: usize = if let Some(arg1) = std::env::args().nth(1) {
         arg1.parse().expect("argument should be an integer")
     } else {
-        7
+        8
     };
     println!("running day {}\n", day);
     match day {
@@ -25,6 +26,7 @@ fn main() {
         5 => day05_supply_stacks::run(),
         6 => day06_tuning_trouble::run(),
         7 => day07_no_space_left_on_device::run(),
+        8 => day08_treetop_tree_house::run(),
         _ => panic!("day {} not found", day),
     }
 }
