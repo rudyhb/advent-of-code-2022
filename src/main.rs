@@ -11,6 +11,7 @@ mod day08_treetop_tree_house;
 mod day09_rope_bridge;
 mod day10_cathode_ray_tube;
 mod day11_monkey_in_the_middle;
+mod day12_hill_climbing_algorithm;
 
 fn main() {
     env_logger::init();
@@ -18,7 +19,7 @@ fn main() {
     let day: usize = if let Some(arg1) = std::env::args().nth(1) {
         arg1.parse().expect("argument should be an integer")
     } else {
-        11
+        12
     };
     println!("running day {}\n", day);
     match day {
@@ -33,6 +34,7 @@ fn main() {
         9 => day09_rope_bridge::run(),
         10 => day10_cathode_ray_tube::run(),
         11 => day11_monkey_in_the_middle::run(),
+        12 => day12_hill_climbing_algorithm::run(),
         _ => panic!("day {} not found", day),
     }
 }
