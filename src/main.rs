@@ -15,6 +15,7 @@ mod day12_hill_climbing_algorithm;
 mod day13_distress_signal;
 mod day14_regolith_reservoir;
 mod day15_beacon_exclusion_zone;
+mod day16_proboscidea_volcanium;
 
 fn main() {
     env_logger::init();
@@ -22,7 +23,7 @@ fn main() {
     let day: usize = if let Some(arg1) = std::env::args().nth(1) {
         arg1.parse().expect("argument should be an integer")
     } else {
-        15
+        16
     };
     println!("running day {}\n", day);
     match day {
@@ -41,6 +42,7 @@ fn main() {
         13 => day13_distress_signal::run(),
         14 => day14_regolith_reservoir::run(),
         15 => day15_beacon_exclusion_zone::run(),
+        16 => day16_proboscidea_volcanium::run(),
         _ => panic!("day {} not found", day),
     }
 }
