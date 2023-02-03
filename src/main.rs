@@ -18,6 +18,7 @@ mod day15_beacon_exclusion_zone;
 mod day16_proboscidea_volcanium;
 mod day17_pyroclastic_flow;
 mod day18_boiling_boulders;
+mod day19_not_enough_minerals;
 
 fn main() {
     env_logger::init();
@@ -25,7 +26,7 @@ fn main() {
     let day: usize = if let Some(arg1) = std::env::args().nth(1) {
         arg1.parse().expect("argument should be an integer")
     } else {
-        18
+        19
     };
     println!("running day {}\n", day);
     match day {
@@ -47,6 +48,7 @@ fn main() {
         16 => day16_proboscidea_volcanium::run(),
         17 => day17_pyroclastic_flow::run(),
         18 => day18_boiling_boulders::run(),
+        19 => day19_not_enough_minerals::run(),
         _ => panic!("day {} not found", day),
     }
 }
