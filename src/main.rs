@@ -21,6 +21,7 @@ mod day18_boiling_boulders;
 mod day19_not_enough_minerals;
 mod day20_grove_positioning_system;
 mod day21_monkey_math;
+mod day22_monkey_map;
 
 fn main() {
     env_logger::init();
@@ -28,7 +29,18 @@ fn main() {
     let day: usize = if let Some(arg1) = std::env::args().nth(1) {
         arg1.parse().expect("argument should be an integer")
     } else {
-        21
+        let last = std::fs::read_dir("src")
+            .unwrap()
+            .filter(|f| {
+                f.as_ref()
+                    .unwrap()
+                    .file_name()
+                    .to_str()
+                    .unwrap()
+                    .starts_with("day")
+            })
+            .count();
+        last
     };
     println!("running day {}\n", day);
     match day {
@@ -53,6 +65,7 @@ fn main() {
         19 => day19_not_enough_minerals::run(),
         20 => day20_grove_positioning_system::run(),
         21 => day21_monkey_math::run(),
+        22 => day22_monkey_map::run(),
         _ => panic!("day {} not found", day),
     }
 }
