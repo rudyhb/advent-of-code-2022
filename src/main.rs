@@ -22,6 +22,7 @@ mod day19_not_enough_minerals;
 mod day20_grove_positioning_system;
 mod day21_monkey_math;
 mod day22_monkey_map;
+mod day23_unstable_diffusion;
 
 fn main() {
     env_logger::init();
@@ -66,6 +67,7 @@ fn main() {
         20 => day20_grove_positioning_system::run(),
         21 => day21_monkey_math::run(),
         22 => day22_monkey_map::run(),
+        23 => day23_unstable_diffusion::run(),
         _ => panic!("day {} not found", day),
     }
 }
