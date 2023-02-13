@@ -23,6 +23,7 @@ mod day20_grove_positioning_system;
 mod day21_monkey_math;
 mod day22_monkey_map;
 mod day23_unstable_diffusion;
+mod day24_blizzard_basin;
 
 fn main() {
     env_logger::init();
@@ -68,6 +69,7 @@ fn main() {
         21 => day21_monkey_math::run(),
         22 => day22_monkey_map::run(),
         23 => day23_unstable_diffusion::run(),
+        24 => day24_blizzard_basin::run(),
         _ => panic!("day {} not found", day),
     }
 }
