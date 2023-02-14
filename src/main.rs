@@ -24,6 +24,7 @@ mod day21_monkey_math;
 mod day22_monkey_map;
 mod day23_unstable_diffusion;
 mod day24_blizzard_basin;
+mod day25_full_of_hot_air;
 
 fn main() {
     env_logger::init();
@@ -70,6 +71,7 @@ fn main() {
         22 => day22_monkey_map::run(),
         23 => day23_unstable_diffusion::run(),
         24 => day24_blizzard_basin::run(),
+        25 => day25_full_of_hot_air::run(),
         _ => panic!("day {} not found", day),
     }
 }
