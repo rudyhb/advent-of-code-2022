@@ -4,7 +4,7 @@ use std::str::FromStr;
 
 use anyhow::{bail, Context};
 use log::{debug, trace};
-use utils::a_star::{a_star_search, AStarNode, AStarOptions, CurrentNodeDetails, Successor};
+use utils::a_star::{a_star_search, Node, Options, CurrentNodeDetails, Successor};
 use utils::pretty_print::PrettyPrint;
 
 pub(crate) fn run() {
@@ -30,11 +30,11 @@ fn get_shortest_path_3x(valley: Valley) -> Vec<State> {
         blizzards_cache: mut blizzards,
     } = valley;
     let mut state = State { time: 0, position };
-    fn distance(details: CurrentNodeDetails<State>) -> i32 {
+    fn distance(details: CurrentNodeDetails<State, i32>, end: &State) -> i32 {
         details
             .current_node
             .position
-            .manhattan_distance(&details.target_node.position)
+            .manhattan_distance(&end.position)
     }
     let mut path = vec![state.clone()];
     for i in 0..3 {
@@ -47,15 +47,11 @@ fn get_shortest_path_3x(valley: Valley) -> Vec<State> {
                 ground.get_initial_position()
             },
         );
-        let options = AStarOptions::default()
-            .with_no_logs()
-            .with_ending_condition(Box::new(|current: &State, end: &State| {
-                current.position == end.position
-            }));
+        let options = Options::default()
+            .with_no_logs();
         path.extend(
             a_star_search(
                 start,
-                &end,
                 |current| {
                     let blizzards = blizzards.get_blizzard_state(current.time + 1, &ground);
                     ground
@@ -65,7 +61,8 @@ fn get_shortest_path_3x(valley: Valley) -> Vec<State> {
                         .map(|c| Successor::new(State::new(current.time + 1, c), 1))
                         .collect()
                 },
-                distance,
+                |current| distance(current, &end),
+                |current| current.position == end.position,
                 Some(&options),
             )
             .map(|res| res.shortest_path)
@@ -92,20 +89,17 @@ fn get_shortest_path(valley: Valley) -> Vec<State> {
     );
     let start = State::new(0, start);
     let end = State::new(0, ground.get_end_position());
-    fn distance(details: CurrentNodeDetails<State>) -> i32 {
+    fn distance(details: CurrentNodeDetails<State, i32>, end: &State) -> i32 {
         details
             .current_node
             .position
-            .manhattan_distance(&details.target_node.position)
+            .manhattan_distance(&end.position)
     }
-    let options = AStarOptions::default()
+    let options = Options::default()
         // .with_no_logs()
-        .with_ending_condition(Box::new(|current: &State, end: &State| {
-            current.position == end.position
-        }));
+    ;
     a_star_search(
         start,
-        &end,
         |current| {
             let blizzards = blizzards.get_blizzard_state(current.time + 1, &ground);
             trace!(
@@ -136,7 +130,8 @@ fn get_shortest_path(valley: Valley) -> Vec<State> {
                 .map(|c| Successor::new(State::new(current.time + 1, c), 1))
                 .collect()
         },
-        distance,
+        |current| distance(current, &end),
+        |current| current.position == end.position,
         Some(&options),
     )
     .map(|res| {
@@ -185,7 +180,7 @@ impl State {
     }
 }
 
-impl AStarNode for State {}
+impl Node for State {}
 
 #[derive(Clone)]
 struct Valley {

@@ -5,7 +5,7 @@ use std::str::FromStr;
 
 use derivative::Derivative;
 use log::debug;
-use utils::a_star::{a_star_search, AStarNode, AStarOptions, CurrentNodeDetails, Successor};
+use utils::a_star::{a_star_search, Node, Options, CurrentNodeDetails, Successor};
 
 pub(crate) fn run() {
     let input = std::fs::read_to_string("input/input12.txt").unwrap();
@@ -41,7 +41,7 @@ fn find_shortest_global_path(hill: Hill) -> i32 {
 }
 
 fn find_shortest_global_path_reverse(hill: &Hill) -> i32 {
-    let get_successors = |current: &State| -> Vec<Successor<State>> {
+    let get_successors = |current: &State| -> Vec<Successor<State, i32>> {
         let result: Vec<Coord> = current
             .position
             .get_neighbors(hill.max_x, hill.max_y)
@@ -64,29 +64,26 @@ fn find_shortest_global_path_reverse(hill: &Hill) -> i32 {
             .map(|c| Successor::new(State::next(c, current.position.clone()), 1))
             .collect()
     };
-    let distance_function = |details: CurrentNodeDetails<State>| -> i32 {
+    let distance_function = |details: CurrentNodeDetails<State, i32>| -> i32 {
         hill.map.get(&details.current_node.position).unwrap().0 as i32
     };
     let map = hill.map.clone();
-    let end_condition =
-        move |current: &State, _: &State| -> bool { map.get(&current.position).unwrap().0 == 0 };
     a_star_search(
         State::new(hill.end.clone()),
-        &State::new(hill.start.clone()),
         get_successors,
         distance_function,
+        move |current: &State| -> bool { map.get(&current.position).unwrap().0 == 0 },
         Some(
-            &AStarOptions::default()
-                .with_ending_condition(Box::new(end_condition))
+            &Options::default()
                 .with_no_logs(),
-        ),
+        )
     )
     .map(|result| result.shortest_path_cost)
     .unwrap()
 }
 
 fn find_shortest_path(hill: &Hill) -> Option<i32> {
-    let get_successors = |current: &State| -> Vec<Successor<State>> {
+    let get_successors = |current: &State| -> Vec<Successor<State, i32>> {
         let result: Vec<Coord> = current
             .position
             .get_neighbors(hill.max_x, hill.max_y)
@@ -108,15 +105,16 @@ fn find_shortest_path(hill: &Hill) -> Option<i32> {
             .map(|c| Successor::new(State::next(c, current.position.clone()), 1))
             .collect()
     };
-    let distance_function = |details: CurrentNodeDetails<State>| -> i32 {
+    let end = State::new(hill.end.clone());
+    let distance_function = |details: CurrentNodeDetails<State, i32>| -> i32 {
         details.current_node.position.manhattan_distance(&hill.end) as i32
     };
     a_star_search(
         State::new(hill.start.clone()),
-        &State::new(hill.end.clone()),
         get_successors,
         distance_function,
-        Some(&AStarOptions::default().with_no_logs()),
+        |current| current == &end,
+        Some(&Options::default().with_no_logs()),
     )
     .map(|result| result.shortest_path_cost)
     .ok()
@@ -197,7 +195,7 @@ impl State {
     }
 }
 
-impl AStarNode for State {}
+impl Node for State {}
 
 #[derive(Ord, PartialOrd, Eq, PartialEq, Hash, Clone)]
 struct Coord {
